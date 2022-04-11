@@ -26,7 +26,22 @@ const paintToCanvas = () => {
   console.log(width, height)
   return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height)
+    // Take the pixels out
+    let pixels = ctx.getImageData(0, 0, width, height)
+    // Mess with them
+    pixels = redEffect(pixels)
+    // Put them back
+    ctx.putImageData(pixels, 0, 0)
   }, 16);
+}
+
+const redEffect = (pixels) => {
+  for (let i = 0; i < pixels.length; i += 4) {
+    pixels.data[i] = pixels.data[i] + 100 // Red
+    pixels.data[i + 1] = pixels.data[i + 1] - 50 // Green
+    pixels.data[i + 2] = pixels.data[i + 2] * 0.5 // Blue
+  }
+  return pixels
 }
 
 const takePhoto = () => {
